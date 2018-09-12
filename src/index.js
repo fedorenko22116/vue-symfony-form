@@ -1,3 +1,8 @@
-import form from './components/symfony-form.vue';
+import symfonyForm from './components/symfony-form.vue';
 
-export default form;
+export default {
+    install(Vue, connector) {
+        Vue.prototype.$connector = connector;
+        Vue.component(symfonyForm);
+    }
+}

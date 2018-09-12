@@ -1,12 +1,15 @@
 <template>
   <form @submit.prevent="onSubmit" ref="form">
-    <div class="alert alert-danger" v-if="showInvalid">Whoops! Seems you've entered invalid data.</div>
+    <div :class="errorClass" v-if="showInvalid">
+      <slot name="warning">
+        Whoops! Seems you've entered invalid data.
+      </slot>
+    </div>
     <slot></slot>
   </form>
 </template>
 
 <script>
-import connector from "../core/connector";
 import serialize from "form-serialize";
 import _ from "lodash";
 
@@ -15,8 +18,9 @@ export default {
   props: {
     action: { type: String, required: true },
     method: { type: String, default: 'GET' },
+    errorClass: { type: String, default: 'form-error'},
     dataPrefix: String,
-    isSecure: Boolean
+    isSecure: Boolean,
   },
   data() {
     return {
@@ -25,27 +29,26 @@ export default {
   },
   methods: {
     onSubmit: function() {
-      let that = this;
       let data = serialize(this.$refs.form, { hash: true });
 
       this.$emit("beforeSubmit", data);
 
-      connector(this.action, this.method, data, this.isSecure)
-        .then(function(req) {
-          that.clearErrors();
+      this.$connector(this.action, this.method, data, this.isSecure)
+        .then((req) => {
+            this.clearErrors();
 
-          that.$emit("onSuccess", req);
+            this.$emit("onSuccess", req);
         })
-        .catch(function(error) {
-          that.$emit("onFail");
+        .catch((error) => {
+            this.$emit("onFail");
 
           let res = error.response;
           if (res.status === 400) {
             if (res.data.hasOwnProperty("errors")) {
-              that.showErrors(res.data.errors);
-              that.showInvalid = false;
+                this.showErrors(res.data.errors);
+                this.showInvalid = false;
             } else {
-              that.showInvalid = true;
+                this.showInvalid = true;
             }
           }
         });
@@ -59,31 +62,29 @@ export default {
       this.fetchErrors(errors, prefix).forEach((value) => {
         let el = this.$refs.form.querySelector("[name='" + value[0] + "']");
         let error = document.createElement("div");
-        error.classList.add("alert");
-        error.classList.add("alert-danger");
+        error.classList.add(this.errorClass);
         error.innerHTML = value[1];
         el.parentNode.insertBefore(error, el);
       });
     },
     clearErrors: function() {
-      let errors = this.$refs.form.getElementsByClassName("alert-danger");
+      let errors = this.$refs.form.getElementsByClassName(this.errorClass);
 
       Array.from(errors).forEach(function(error) {
         error.remove();
       });
     },
     fetchErrors: function(errors, prefix = "") {
-      let that = this;
       let result = [];
 
       if (errors.hasOwnProperty("children")) {
-        return that.fetchErrors(errors.children, prefix);
+        return this.fetchErrors(errors.children, prefix);
       } else {
-        _.forOwn(errors, function(value, index) {
+        _.forOwn(errors, (value, index) => {
           if ("" !== prefix) index = "[" + index + "]";
 
           if (value.hasOwnProperty("children")) {
-            result.push(_.flatten(that.fetchErrors(value, prefix + index)));
+            result.push(_.flatten(this.fetchErrors(value, prefix + index)));
           } else if (value.hasOwnProperty("errors")) {
             result.push([prefix + index, value.errors[0]]);
           }

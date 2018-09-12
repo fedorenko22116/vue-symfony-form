@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export default function(route, method, data, isSecure) {
+export default function(action, method, data, isSecure) {
     return axios.request({
-        url: route,
+        url: action,
         method: method,
         data: data
     });
