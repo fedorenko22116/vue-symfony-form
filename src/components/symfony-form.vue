@@ -43,7 +43,7 @@ export default {
             this.$emit("onFail");
 
           let res = error.response;
-          if (res.status === 400) {
+          if (res.status >= 400) {
             if (res.data.hasOwnProperty("errors")) {
                 this.showErrors(res.data.errors);
                 this.showInvalid = false;

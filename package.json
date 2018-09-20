@@ -1,10 +1,19 @@
 {
   "name": "vue-symfony-form",
-  "version": "1.0.0",
-  "description": "A Vue.js component for symfony ajax form creation",
+  "version": "1.0.7-beta",
+  "description": "A Vue.js plugin for Symfony ajax form creation",
   "main": "dist/vue-symfony-form.umd.js",
   "module": "dist/vue-symfony-form.esm.js",
   "unpkg": "dist/vue-symfony-form.js",
+  "keywords": [
+    "symfony",
+    "symfony-form",
+    "symfony-vue",
+    "vue",
+    "vue-form",
+    "vue-spa",
+    "vue-symfony"
+  ],
   "browser": {
     "./sfc": "src/vue-symfony-form.vue"
   },
