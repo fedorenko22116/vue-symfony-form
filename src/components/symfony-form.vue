@@ -1,25 +1,31 @@
 <template>
-  <form @submit.prevent="onSubmit" ref="form">
-    <div :class="errorClass" v-if="showInvalid">
+  <form
+    ref="form"
+    @submit.prevent="onSubmit"
+  >
+    <div 
+      v-if="showInvalid" 
+      :class="errorClass"
+    >
       <slot name="warning">
         Whoops! Seems you've entered invalid data.
       </slot>
     </div>
-    <slot></slot>
+    <slot />
   </form>
 </template>
 
 <script>
-import serialize from "form-serialize";
-import _ from "lodash";
+import serialize from 'form-serialize';
+import _ from 'lodash';
 
 export default {
-  name: "symfony-form",
+  name: 'SymfonyForm',
   props: {
     action: { type: String, required: true },
     method: { type: String, default: 'GET' },
     errorClass: { type: String, default: 'form-error'},
-    dataPrefix: String,
+    dataPrefix: { type: String, default: null },
     isSecure: Boolean,
   },
   data() {
@@ -31,37 +37,37 @@ export default {
     onSubmit: function() {
       let data = serialize(this.$refs.form, { hash: true });
 
-      this.$emit("beforeSubmit", data);
+      this.$emit('beforeSubmit', data);
 
       this.$connector(this.action, this.method, data, this.isSecure)
         .then((req) => {
-            this.clearErrors();
+          this.clearErrors();
 
-            this.$emit("onSuccess", req);
+          this.$emit('onSuccess', req);
         })
         .catch((error) => {
-            this.$emit("onFail");
+          this.$emit('onFail');
 
           let res = error.response;
           if (res.status >= 400) {
-            if (res.data.hasOwnProperty("errors")) {
-                this.showErrors(res.data.errors);
-                this.showInvalid = false;
+            if (res.data.hasOwnProperty('errors')) {
+              this.showErrors(res.data.errors);
+              this.showInvalid = false;
             } else {
-                this.showInvalid = true;
+              this.showInvalid = true;
             }
           }
         });
 
-      this.$emit("onSubmit");
+      this.$emit('onSubmit');
     },
     showErrors: function(errors) {
       this.clearErrors();
 
-      let prefix = this.dataPrefix === undefined ? "" : this.dataPrefix;
+      let prefix = this.dataPrefix === undefined ? '' : this.dataPrefix;
       this.fetchErrors(errors, prefix).forEach((value) => {
-        let el = this.$refs.form.querySelector("[name='" + value[0] + "']");
-        let error = document.createElement("div");
+        let el = this.$refs.form.querySelector('[name=\'' + value[0] + '\']');
+        let error = document.createElement('div');
         error.classList.add(this.errorClass);
         error.innerHTML = value[1];
         el.parentNode.insertBefore(error, el);
@@ -74,18 +80,18 @@ export default {
         error.remove();
       });
     },
-    fetchErrors: function(errors, prefix = "") {
+    fetchErrors: function(errors, prefix = '') {
       let result = [];
 
-      if (errors.hasOwnProperty("children")) {
+      if (errors.hasOwnProperty('children')) {
         return this.fetchErrors(errors.children, prefix);
       } else {
         _.forOwn(errors, (value, index) => {
-          if ("" !== prefix) index = "[" + index + "]";
+          if ('' !== prefix) index = '[' + index + ']';
 
-          if (value.hasOwnProperty("children")) {
+          if (value.hasOwnProperty('children')) {
             result.push(_.flatten(this.fetchErrors(value, prefix + index)));
-          } else if (value.hasOwnProperty("errors")) {
+          } else if (value.hasOwnProperty('errors')) {
             result.push([prefix + index, value.errors[0]]);
           }
         });
