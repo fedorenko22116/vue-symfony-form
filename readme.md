@@ -1,7 +1,7 @@
-#vue-symfony-form
+# vue-symfony-form
 Easy to use AJAX forms written to handle symfony form errors.
 
-##Set Up
+## Set Up
 Enable symfony-form plugin and add connector:
 ```javascript
 import symfonyForm from 'vue-symfony-form';
@@ -14,7 +14,7 @@ Vue.use(symfonyForm, {
 
 Connector is a driver responsible for sending messages. You can replace it with your own.
 
-##Usage
+## Usage
 Create new form with `symfony-form` component with required `action` attribute. <br>
 Following code will send simple `GET` request to `action` url:
 ```vue
@@ -28,28 +28,28 @@ When form will be proceeded you'll get appropriate errors above fields in case y
 
 That's all.
 
-##Hooks
-#####@beforeSubmit(data)
+## Hooks
+##### @beforeSubmit(data)
     Action procceeded before data will be sent.
-#####@onSuccess(request)
+##### @onSuccess(request)
     Action in case of success status
-#####@onFail
+##### @onFail
     Action in case of invalid data
-#####@onSubmit
+##### @onSubmit
     Action procceeded when request completely sent
     
-##Properties
-#####:method
+## Properties
+##### :method
     Request method ('GET' by default)
-#####:error-class
+##### :error-class
     Class which will be performed to error divs
-#####:data-prefix
+##### :data-prefix
     Set unify data prefix for input fields. [dataPrefix][name]
-#####:is-secure
+##### :is-secure
     Just a flag to use in connector. You can modify connector and set extra headers for authorized requests
 
-##Slots
-#####warning
+## Slots
+##### warning
     Use it to modify default error message in case of request was failed
 
-###In beta now. Don't recommend to use it in production.
+### In beta now. Don't recommend to use it in production.
