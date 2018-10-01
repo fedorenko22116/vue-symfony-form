@@ -52,4 +52,4 @@ That's all.
 ##### warning
     Use it to modify default error message in case of request was failed
 
-## Look usage examples in [examples](https://github.com/22116/vue-symfony-form) directory
+## Look usage examples in [examples](https://github.com/22116/vue-symfony-form/tree/master/examples) directory
