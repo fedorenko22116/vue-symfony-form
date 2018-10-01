@@ -17,7 +17,7 @@ Connector is a driver responsible for sending messages. You can replace it with 
 ## Usage
 Create new form with `symfony-form` component with required `action` attribute. <br>
 Following code will send simple `GET` request to `action` url:
-```vue
+```html
 <symfony-form action="/foo">
   <input type="text" name="name" />
   <input type="email" name="email" />
@@ -52,4 +52,4 @@ That's all.
 ##### warning
     Use it to modify default error message in case of request was failed
 
-### In beta now. Don't recommend to use it in production.
+##Look usage examples in `examples` directory
