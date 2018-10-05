@@ -6,6 +6,7 @@ use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+//..
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,7 +35,7 @@ class ControllerExample extends FOSRestController
         );
 
         if (!$form->isValid()) {
-            return $form;
+            return $this->view($form, 402);
         }
 
         $userManager->save($user);
