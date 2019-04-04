@@ -15,7 +15,7 @@
       action: { type: String, required: true },
       method: { type: String, default: 'GET' },
       errorClass: { type: String, default: 'form-error'},
-      dataPrefix: { type: String, default: null },
+      dataPrefix: { type: String, default: undefined },
       isSecure: Boolean,
     },
     data: function data() {

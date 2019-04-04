@@ -3,8 +3,8 @@
     ref="form"
     @submit.prevent="onSubmit"
   >
-    <div 
-      v-if="showInvalid" 
+    <div
+      v-if="showInvalid"
       :class="errorClass"
     >
       <slot name="warning">
@@ -25,7 +25,7 @@ export default {
     action: { type: String, required: true },
     method: { type: String, default: 'GET' },
     errorClass: { type: String, default: 'form-error'},
-    dataPrefix: { type: String, default: null },
+    dataPrefix: { type: String, default: undefined },
     isSecure: Boolean,
   },
   data() {
